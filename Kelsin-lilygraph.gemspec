@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".gitignore",
+     "Kelsin-lilygraph.gemspec",
      "LICENSE",
      "README",
      "Rakefile",
