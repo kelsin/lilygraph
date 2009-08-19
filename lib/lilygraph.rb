@@ -4,6 +4,14 @@
 
 require 'color'
 
+# This is the main graph to use if you want to create a graph!
+#
+#   graph = Lilygraph.new(:title => "My Awesome Graph")
+#   graph.data = [1,2,3]
+#   graph.labels = ['One','Two','Three']
+#   graph.render
+#
+# This class outputs svg as a string once you call render.
 class Lilygraph
   # Default options for the initializer
   DEFAULT_OPTIONS = {
@@ -26,27 +34,32 @@ class Lilygraph
   # This is the data for the graph. It should be an array where every item is
   # either a number or an array of numbers.
   # 
-  # Examples:
-  # For a simple bar graph: data=[1,2,3]
-  # For a grouped bar graph: data=[[1,10],[2,20],[3,30]]
+  # For a simple bar graph:
+  #   graph.data=[1,2,3]
+  # For a grouped bar graph:
+  #   graph.data=[[1,10],[2,20],[3,30]]
   attr_accessor :data
   
-  # Returns a new graph creator with some default options and other options that you pass.
+  # Returns a new graph creator with some default options specified via a hash:
+  # height:: String to use as height parameter on the svg tag. Default is <tt>'100%'</tt>.
+  # width:: String to use as width parameter on the svg tag. Default is <tt>'100%'</tt>.
+  # indent:: Indent option to the XmlMarkup object. Defaults to <tt>2</tt>.
+  # padding:: Number of svg units in between two bars. Defaults to <tt>14</tt>.
+  # bar_text:: (Boolean) Whether or not to include the text labels above every bar. Defaults to +true+.
+  # viewbox:: Hash of <tt>:height</tt> and <tt>:width</tt> keys to use for the viewbox parameter of the svg tag. Defaults to <tt>{:height => 600, :width => 800}</tt>.
+  # margin:: Hash of margins to use for graph (in svg units). Defaults to <tt>{:top => 50, :left => 50, :right => 50, :bottom => 100}</tt>.
   #
-  # The options has includes:
-  # :height - String to use as height parameter on the svg tag. Default is '100%'.
-  # :width - String to use as width parameter on the svg tag. Default is '100%'.
-  # :indent - Indent option to the XmlMarkup object. Defaults to 2.
-  # :padding - Number of svg units in between two bars.
-  # :viewbox - Hash of :height and :width keys to use for the viewbox parameter of the svg tag. Defaults to { :height => 600, :width => 800 }.
-  # :margin - Hash of margins to use for graph (in svg units). Defaults to { :top => 50, :left => 50, :right => 50, :bottom => 100 }.
+  # For example, this creates a graph with a title and different indent setting:
+  #
+  #   graph = Lilygraph.new(:title => 'Testing a title', :indent => 4)
   def initialize(options = {})
     @options = DEFAULT_OPTIONS.merge(options)
     @data = []
     @labels = []
   end
 
-  # Updates the graph options with items from the passed in hash
+  # Updates the graph options with items from the passed in hash. Please refer
+  # to new for a description of available options.
   def update_options(options = {})
     @options = @options.merge(options)
   end
@@ -55,6 +68,10 @@ class Lilygraph
   # order to add your own items to the graph. Your block is passed the XmlMarkup
   # object to use as well as the options hash in case you need to use some of
   # that data.
+  #
+  #   graph.render do |xml|
+  #     xml.text "Hello", :x => 5, :y => 25
+  #   end
   def render
     output = ""
     xml = Builder::XmlMarkup.new(:target => output, :indent => @options[:indent])
@@ -152,7 +169,7 @@ class Lilygraph
           end
 
           # Yield in case they want to do some custom drawing and have a block ready
-          yield xml, @options if block_given?
+          yield(xml, @options) if block_given?
 
         end
       end

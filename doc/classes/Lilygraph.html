@@ -78,6 +78,22 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <p>
+This is the main graph to use if you want to create a graph!
+</p>
+<pre>
+  graph = Lilygraph.new(:title =&gt; &quot;My Awesome Graph&quot;)
+  graph.data = [1,2,3]
+  graph.labels = ['One','Two','Three']
+  graph.render
+</pre>
+<p>
+This class outputs svg as a string once you call <a
+href="Lilygraph.html#M000003">render</a>.
+</p>
+
+    </div>
 
 
    </div>
@@ -134,9 +150,17 @@ This is the data for the graph. It should be an array where every item is
 either a number or an array of numbers.
 
 <p>
-Examples: For a simple bar graph: data=[1,2,3] For a grouped bar graph:
-data=[[1,10],[2,20],[3,30]]
+For a simple bar graph:
 </p>
+<pre>
+  graph.data=[1,2,3]
+</pre>
+<p>
+For a grouped bar graph:
+</p>
+<pre>
+  graph.data=[[1,10],[2,20],[3,30]]
+</pre>
 </td>
         </tr>
         <tr class="top-aligned-row context-row">
@@ -172,19 +196,44 @@ array.
         <div class="method-description">
           <p>
 Returns a <a href="Lilygraph.html#M000001">new</a> graph creator with some
-default options and other options that you pass.
+default options specified via a hash:
 </p>
+<table>
+<tr><td valign="top">height:</td><td>String to use as height parameter on the svg tag. Default is
+<tt>&#8216;100%&#8217;</tt>.
+
+</td></tr>
+<tr><td valign="top">width:</td><td>String to use as width parameter on the svg tag. Default is
+<tt>&#8216;100%&#8217;</tt>.
+
+</td></tr>
+<tr><td valign="top">indent:</td><td>Indent option to the XmlMarkup object. Defaults to <tt>2</tt>.
+
+</td></tr>
+<tr><td valign="top">padding:</td><td>Number of svg units in between two bars. Defaults to <tt>14</tt>.
+
+</td></tr>
+<tr><td valign="top">bar_text:</td><td>(Boolean) Whether or not to include the text labels above every bar.
+Defaults to <tt>true</tt>.
+
+</td></tr>
+<tr><td valign="top">viewbox:</td><td>Hash of <tt>:height</tt> and <tt>:width</tt> keys to use for the viewbox
+parameter of the svg tag. Defaults to <tt>{:height =&gt; 600, :width =&gt;
+800}</tt>.
+
+</td></tr>
+<tr><td valign="top">margin:</td><td>Hash of margins to use for graph (in svg units). Defaults to <tt>{:top
+=&gt; 50, :left =&gt; 50, :right =&gt; 50, :bottom =&gt; 100}</tt>.
+
+</td></tr>
+</table>
 <p>
-The options has includes: :height - String to use as height parameter on
-the svg tag. Default is &#8216;100%&#8217;. :width - String to use as width
-parameter on the svg tag. Default is &#8216;100%&#8217;. :indent - Indent
-option to the XmlMarkup object. Defaults to 2. :padding - Number of svg
-units in between two bars. :viewbox - Hash of :height and :width keys to
-use for the viewbox parameter of the svg tag. Defaults to { :height =&gt;
-600, :width =&gt; 800 }. :margin - Hash of margins to use for graph (in svg
-units). Defaults to { :top =&gt; 50, :left =&gt; 50, :right =&gt; 50,
-:bottom =&gt; 100 }.
+For example, this creates a graph with a title and different indent
+setting:
 </p>
+<pre>
+  graph = Lilygraph.new(:title =&gt; 'Testing a title', :indent =&gt; 4)
+</pre>
         </div>
       </div>
 
@@ -196,7 +245,7 @@ units). Defaults to { :top =&gt; 50, :left =&gt; 50, :right =&gt; 50,
         <div class="method-heading">
           <a href="Lilygraph.src/M000003.html" target="Code" class="method-signature"
             onclick="popupCode('Lilygraph.src/M000003.html');return false;">
-          <span class="method-name">render</span><span class="method-args">() {|xml, @options if block_given?| ...}</span>
+          <span class="method-name">render</span><span class="method-args">() {|xml, @options| ...}</span>
           </a>
         </div>
       
@@ -207,6 +256,11 @@ order to add your own items to the graph. Your block is passed the
 XmlMarkup object to use as well as the options hash in case you need to use
 some of that data.
 </p>
+<pre>
+  graph.render do |xml|
+    xml.text &quot;Hello&quot;, :x =&gt; 5, :y =&gt; 25
+  end
+</pre>
         </div>
       </div>
 
@@ -222,7 +276,9 @@ some of that data.
       
         <div class="method-description">
           <p>
-Updates the graph options with items from the passed in hash
+Updates the graph options with items from the passed in hash. Please refer
+to <a href="Lilygraph.html#M000001">new</a> for a description of available
+options.
 </p>
         </div>
       </div>

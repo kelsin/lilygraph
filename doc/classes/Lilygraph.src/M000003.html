@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File lib/lilygraph.rb, line 58</span>
+  <pre><span class="ruby-comment cmt"># File lib/lilygraph.rb, line 75</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">render</span>
     <span class="ruby-identifier">output</span> = <span class="ruby-value str">&quot;&quot;</span>
     <span class="ruby-identifier">xml</span> = <span class="ruby-constant">Builder</span><span class="ruby-operator">::</span><span class="ruby-constant">XmlMarkup</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:target</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">output</span>, <span class="ruby-identifier">:indent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:indent</span>])
@@ -108,7 +108,7 @@
           <span class="ruby-keyword kw">end</span>
 
           <span class="ruby-comment cmt"># Yield in case they want to do some custom drawing and have a block ready</span>
-          <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">xml</span>, <span class="ruby-ivar">@options</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+          <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">xml</span>, <span class="ruby-ivar">@options</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
 
         <span class="ruby-keyword kw">end</span>
       <span class="ruby-keyword kw">end</span>
