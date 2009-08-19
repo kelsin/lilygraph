@@ -1,4 +1,5 @@
 # Gem spec for lilygraph
+require 'rake'
 
 Gem::Specification.new do |s|
   s.name = %q{lilygraph}
@@ -20,6 +21,7 @@ Gem::Specification.new do |s|
   
   s.add_dependency("builder", ">= 2.1.2")
   s.add_dependency("color-tools", ">= 1.3.0")
+  s.add_development_dependency("rake", ">= 0.8.7")
 
   s.platform = Gem::Platform::RUBY
   s.rubygems_version = %q{1.3.0}
