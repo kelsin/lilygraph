@@ -2,6 +2,8 @@
 #
 # :author: Christopher Giroir <kelsin@valefor.com>
 
+require 'color'
+
 class Lilygraph
   # Default options for the initializer
   DEFAULT_OPTIONS = {
