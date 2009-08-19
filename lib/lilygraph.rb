@@ -169,10 +169,10 @@ class Lilygraph
   end
 
   def dx
-    700.0 / Float(number_of_slots)
+    graph_height / Float(number_of_slots)
   end
 
   def dy
-    4500.0 / Float(max)
+    (graph_width * 10.0) / Float(max)
   end
 end
