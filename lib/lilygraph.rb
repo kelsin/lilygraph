@@ -11,6 +11,7 @@ class Lilygraph
     :width => '100%',
     :indent => 2,
     :padding => 14,
+    :bar_text => true,
     :viewbox => {
       :width => 800,
       :height => 600
@@ -122,18 +123,30 @@ class Lilygraph
 
               x = (@options[:margin][:left] + (dx * data_index)).round
 
+              # Rectangles
               data.each_with_index do |number, number_index|
                 color = Color::HSL.from_fraction(data_index * (1.0 / @data.size),1.0, 0.4 + (number_index * 0.2)).to_rgb
                 height = ((dy / 10.0) * number).round
 
                 bar_x = (x + ((dx - width) / 2.0) + (number_index * bar_width)).round
-                text_x = (bar_x + (bar_width / 2.0)).round
-
                 bar_y = @options[:viewbox][:height] - @options[:margin][:bottom] - height
-                text_y = bar_y - 3
 
                 xml.rect :fill => color.html, :stroke => color.html, 'stroke-width' => 0, :x => bar_x, :width => bar_width, :y => bar_y, :height => height - 1
-                xml.text number, :x => text_x, :y => text_y, 'text-anchor' => 'middle'
+              end
+
+              # Text
+              if @options[:bar_text]
+                data.each_with_index do |number, number_index|
+                  height = ((dy / 10.0) * number).round
+
+                  bar_x = (x + ((dx - width) / 2.0) + (number_index * bar_width)).round
+                  text_x = (bar_x + (bar_width / 2.0)).round
+
+                  bar_y = @options[:viewbox][:height] - @options[:margin][:bottom] - height
+                  text_y = bar_y - 3
+
+                  xml.text number, :x => text_x, :y => text_y, 'text-anchor' => 'middle'
+                end
               end
             end
           end
