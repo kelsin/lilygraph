@@ -8,7 +8,6 @@ begin
     s.homepage = "http://github.com/Kelsin/lilygraph"
     s.authors = ["Christopher Giroir"]
 
-    s.add_dependency("builder", ">= 2.1.2")
     s.add_dependency("color-tools", ">= 1.3.0")
   end
 rescue LoadError
