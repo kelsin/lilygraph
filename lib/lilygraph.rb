@@ -1,6 +1,6 @@
 # This is the main graphing class used for generating svg graphs.
 #
-# :author: Christopher Giroir <kelsin@valefor.com>
+# Author:: Christopher Giroir <kelsin@valefor.com>
 
 require 'color'
 
