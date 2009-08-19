@@ -1,7 +1,7 @@
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
-    s.name = "lilygraph"
+    s.name = "Kelsin-lilygraph"
     s.summary = "Lilygraph is a Ruby library for creating svg charts and graphs based on XmlBuilder."
     s.description = "Lilygraph is a Ruby library for creating svg charts and graphs based on XmlBuilder."
     s.email = "kelsin@valefor.com"
