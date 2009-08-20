@@ -10,6 +10,7 @@ begin
 
     s.add_dependency("color-tools", ">= 1.3.0")
   end
+  Jeweler::GemcutterTasks.new
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
