@@ -61,7 +61,14 @@ class Lilygraph
   #     Color::HSL.from_fraction(Float(data_index) / Float(data_size), 1.0, 0.4 + (Float(number_index) / Float(number_size) * 0.4)).to_rgb.html
   #   end
   attr_accessor :colors
-  
+
+  # This allows you to make a legend for your graph. Just pass in a hash of
+  # color => text pairs. Set to nil if you don't want a legend. No legend is the
+  # default.
+  #
+  #   graph.legend = { '#ff0000' => 'Chris', '#00ff00' => 'Caitlin' }
+  attr_accessor :legend
+
   # Returns a new graph creator with some default options specified via a hash:
   # height:: String to use as height parameter on the svg tag. Default is <tt>'100%'</tt>.
   # width:: String to use as width parameter on the svg tag. Default is <tt>'100%'</tt>.
@@ -78,6 +85,8 @@ class Lilygraph
     @options = DEFAULT_OPTIONS.merge(options)
     @data = []
     @labels = []
+
+    @legend = nil
 
     @colors = Proc.new do |data_index, number_index, data_size, number_size|
       Color::HSL.from_fraction(Float(data_index) / Float(data_size), 1.0, 0.4 + (Float(number_index) / Float(number_size) * 0.4)).html
@@ -204,6 +213,19 @@ class Lilygraph
                   xml.text number, :x => text_x, :y => text_y, 'text-anchor' => 'middle'
                 end
               end
+            end
+          end
+
+          # Legend
+          if @legend
+            legend_x = @options[:viewbox][:width] - (3 * @options[:margin][:right])
+            legend_y = @options[:margin][:top] / 2
+            xml.rect :fill => '#ffffff', :stroke => '#000000', 'stroke-width' => 2, :x => legend_x, :y => legend_y, :width => (2.5 * @options[:margin][:right]), :height => (@legend.size * 15) + 16
+
+            @legend.sort.each_with_index do |data, index|
+              color, label = data
+              xml.rect :fill => color, :stroke => color, 'stroke-width' => 0, :x => legend_x + 10, :y => legend_y + 10 + (index * 15), :width => 35, :height => 10
+              xml.text label, :x => legend_x + 70, :y => legend_y + 18 + (index * 15), 'text-anchor' => 'left'
             end
           end
 
