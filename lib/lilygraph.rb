@@ -216,6 +216,19 @@ class Lilygraph
             end
           end
 
+          # Legend
+          if @legend
+            legend_x = @options[:viewbox][:width] - (3 * @options[:margin][:right])
+            legend_y = @options[:margin][:top] / 2
+            xml.rect :fill => '#ffffff', :stroke => '#000000', 'stroke-width' => 2, :x => legend_x, :y => legend_y, :width => (2.5 * @options[:margin][:right]), :height => (@legend.size * 15) + 16
+
+            @legend.sort.each_with_index do |data, index|
+              color, label = data
+              xml.rect :fill => color, :stroke => color, 'stroke-width' => 0, :x => legend_x + 10, :y => legend_y + 10 + (index * 15), :width => 35, :height => 10
+              xml.text label, :x => legend_x + 70, :y => legend_y + 18 + (index * 15), 'text-anchor' => 'left'
+            end
+          end
+
           # Yield in case they want to do some custom drawing and have a block ready
           yield(xml, @options) if block_given?
 
