@@ -10,11 +10,15 @@
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File lib/lilygraph.rb, line 55</span>
+  <pre><span class="ruby-comment cmt"># File lib/lilygraph.rb, line 77</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span> = {})
     <span class="ruby-ivar">@options</span> = <span class="ruby-constant">DEFAULT_OPTIONS</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>)
     <span class="ruby-ivar">@data</span> = []
     <span class="ruby-ivar">@labels</span> = []
+
+    <span class="ruby-ivar">@colors</span> = <span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">data_index</span>, <span class="ruby-identifier">number_index</span>, <span class="ruby-identifier">data_size</span>, <span class="ruby-identifier">number_size</span><span class="ruby-operator">|</span>
+      <span class="ruby-constant">Color</span><span class="ruby-operator">::</span><span class="ruby-constant">HSL</span>.<span class="ruby-identifier">from_fraction</span>(<span class="ruby-constant">Float</span>(<span class="ruby-identifier">data_index</span>) <span class="ruby-operator">/</span> <span class="ruby-constant">Float</span>(<span class="ruby-identifier">data_size</span>), <span class="ruby-value">1.0</span>, <span class="ruby-value">0</span><span class="ruby-value">.4</span> <span class="ruby-operator">+</span> (<span class="ruby-constant">Float</span>(<span class="ruby-identifier">number_index</span>) <span class="ruby-operator">/</span> <span class="ruby-constant">Float</span>(<span class="ruby-identifier">number_size</span>) <span class="ruby-operator">*</span> <span class="ruby-value">0</span><span class="ruby-value">.4</span>)).<span class="ruby-identifier">to_rgb</span>.<span class="ruby-identifier">html</span>
+    <span class="ruby-keyword kw">end</span>
   <span class="ruby-keyword kw">end</span></pre>
 </body>
 </html>

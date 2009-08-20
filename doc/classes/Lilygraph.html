@@ -143,6 +143,55 @@ Default options for the initializer
       <div class="name-list">
         <table>
         <tr class="top-aligned-row context-row">
+          <td class="context-item-name">colors</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+This allows you to set colors for the bars.
+
+<p>
+If you just want a single color:
+</p>
+<pre>
+  graph.colors='#0000aa'
+</pre>
+<p>
+If you want to make each bar (or bar group) different colors:
+</p>
+<pre>
+  graph.colors=['#aa0000','#00aa00','#0000aa']
+</pre>
+<p>
+If you want every bar group to be the same, but each bar in the groups to
+have a different color
+</p>
+<pre>
+  graph.colors=[['#aa0000','#00aa00','#0000aa']]
+</pre>
+<p>
+If you want to set every bar group color:
+</p>
+<pre>
+  graph.colors=[['#aa0000','#00aa00','#0000aa'],['#bb0000','#00bb00','#0000bb']]
+</pre>
+<p>
+Last but not least you can set the color value to any object that responds
+to call (like a Proc). The proc takes four arguments. data_index: The index
+of the current bar (or group) number_index: The index of the current bar
+INSIDE of the current bar group (always 0 if you don&#8216;t have grouped
+bars) data_size: total number of bar or groups. number_size: total number
+of bars in the current group (always 1 if you don&#8216;t have bar groups)
+</p>
+<p>
+The default proc looks like:
+</p>
+<pre>
+  graph.colors=Proc.new do |data_index, number_index, data_size, number_size|
+    Color::HSL.from_fraction(Float(data_index) / Float(data_size), 1.0, 0.4 + (Float(number_index) / Float(number_size) * 0.4)).to_rgb.html
+  end
+</pre>
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
           <td class="context-item-name">data</td>
           <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
           <td class="context-item-desc">

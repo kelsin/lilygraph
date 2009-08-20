@@ -41,6 +41,25 @@ class Lilygraph
   attr_accessor :data
 
   # This allows you to set colors for the bars.
+  #
+  # If you just want a single color:
+  #   graph.colors='#0000aa'
+  # If you want to make each bar (or bar group) different colors:
+  #   graph.colors=['#aa0000','#00aa00','#0000aa']
+  # If you want every bar group to be the same, but each bar in the groups to have a different color
+  #   graph.colors=[['#aa0000','#00aa00','#0000aa']]
+  # If you want to set every bar group color:
+  #   graph.colors=[['#aa0000','#00aa00','#0000aa'],['#bb0000','#00bb00','#0000bb']]
+  # Last but not least you can set the color value to any object that responds to call (like a Proc). The proc takes four arguments.
+  # data_index: The index of the current bar (or group)
+  # number_index: The index of the current bar INSIDE of the current bar group (always 0 if you don't have grouped bars)
+  # data_size: total number of bar or groups.
+  # number_size: total number of bars in the current group (always 1 if you don't have bar groups)
+  # 
+  # The default proc looks like:
+  #   graph.colors=Proc.new do |data_index, number_index, data_size, number_size|
+  #     Color::HSL.from_fraction(Float(data_index) / Float(data_size), 1.0, 0.4 + (Float(number_index) / Float(number_size) * 0.4)).to_rgb.html
+  #   end
   attr_accessor :colors
   
   # Returns a new graph creator with some default options specified via a hash:
@@ -151,12 +170,16 @@ class Lilygraph
               data.each_with_index do |number, number_index|
                 color = if @colors.respond_to? :call
                           @colors.call(data_index, number_index, @data.size, data.size)
-                        elsif @colors.respond_to? :[]
-                          if @colors[data_index].respond_to? :[]
-                            @colors[data_index][number_index]
+                        elsif @colors.class == Array
+                          first = @colors[data_index % (@colors.size)]
+
+                          if first.class == Array
+                            first[number_index % (first.size)]
                           else
-                            @colors[data_index]
+                            first
                           end
+                        else
+                          @colors
                         end
 
                 height = ((dy / 10.0) * number).round
