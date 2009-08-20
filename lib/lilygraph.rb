@@ -39,6 +39,9 @@ class Lilygraph
   # For a grouped bar graph:
   #   graph.data=[[1,10],[2,20],[3,30]]
   attr_accessor :data
+
+  # This allows you to set colors for the bars.
+  attr_accessor :colors
   
   # Returns a new graph creator with some default options specified via a hash:
   # height:: String to use as height parameter on the svg tag. Default is <tt>'100%'</tt>.
@@ -56,6 +59,10 @@ class Lilygraph
     @options = DEFAULT_OPTIONS.merge(options)
     @data = []
     @labels = []
+
+    @colors = Proc.new do |data_index, number_index, data_size, number_size|
+      Color::HSL.from_fraction(Float(data_index) / Float(data_size), 1.0, 0.4 + (Float(number_index) / Float(number_size) * 0.4)).to_rgb.html
+    end
   end
 
   # Updates the graph options with items from the passed in hash. Please refer
@@ -142,13 +149,22 @@ class Lilygraph
 
               # Rectangles
               data.each_with_index do |number, number_index|
-                color = Color::HSL.from_fraction(data_index * (1.0 / @data.size),1.0, 0.4 + (number_index * 0.2)).to_rgb
+                color = if @colors.respond_to? :call
+                          @colors.call(data_index, number_index, @data.size, data.size)
+                        elsif @colors.respond_to? :[]
+                          if @colors[data_index].respond_to? :[]
+                            @colors[data_index][number_index]
+                          else
+                            @colors[data_index]
+                          end
+                        end
+
                 height = ((dy / 10.0) * number).round
 
                 bar_x = (x + ((dx - width) / 2.0) + (number_index * bar_width)).round
                 bar_y = @options[:viewbox][:height] - @options[:margin][:bottom] - height
 
-                xml.rect :fill => color.html, :stroke => color.html, 'stroke-width' => 0, :x => bar_x, :width => bar_width, :y => bar_y, :height => height - 1
+                xml.rect :fill => color, :stroke => color, 'stroke-width' => 0, :x => bar_x, :width => bar_width, :y => bar_y, :height => height - 1
               end
 
               # Text
