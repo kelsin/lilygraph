@@ -80,7 +80,7 @@ class Lilygraph
     @labels = []
 
     @colors = Proc.new do |data_index, number_index, data_size, number_size|
-      Color::HSL.from_fraction(Float(data_index) / Float(data_size), 1.0, 0.4 + (Float(number_index) / Float(number_size) * 0.4)).to_rgb.html
+      Color::HSL.from_fraction(Float(data_index) / Float(data_size), 1.0, 0.4 + (Float(number_index) / Float(number_size) * 0.4)).html
     end
   end
 
