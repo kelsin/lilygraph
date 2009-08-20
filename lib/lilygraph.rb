@@ -61,7 +61,14 @@ class Lilygraph
   #     Color::HSL.from_fraction(Float(data_index) / Float(data_size), 1.0, 0.4 + (Float(number_index) / Float(number_size) * 0.4)).to_rgb.html
   #   end
   attr_accessor :colors
-  
+
+  # This allows you to make a legend for your graph. Just pass in a hash of
+  # color => text pairs. Set to nil if you don't want a legend. No legend is the
+  # default.
+  #
+  #   graph.legend = { '#ff0000' => 'Chris', '#00ff00' => 'Caitlin' }
+  attr_accessor :legend
+
   # Returns a new graph creator with some default options specified via a hash:
   # height:: String to use as height parameter on the svg tag. Default is <tt>'100%'</tt>.
   # width:: String to use as width parameter on the svg tag. Default is <tt>'100%'</tt>.
