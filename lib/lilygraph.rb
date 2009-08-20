@@ -4,7 +4,7 @@
 
 require 'color'
 
-# This is the main graph to use if you want to create a graph!
+# This is the main class to use if you want to create a graph!
 #
 #   graph = Lilygraph.new(:title => "My Awesome Graph")
 #   graph.data = [1,2,3]

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Christopher Giroir"]
-  s.date = %q{2009-08-19}
+  s.date = %q{2009-08-20}
   s.description = %q{Lilygraph is a Ruby library for creating svg charts and graphs based on XmlBuilder.}
   s.email = %q{kelsin@valefor.com}
   s.extra_rdoc_files = [
@@ -22,6 +22,17 @@ Gem::Specification.new do |s|
      "README",
      "Rakefile",
      "VERSION",
+     "doc/classes/Lilygraph.html",
+     "doc/classes/Lilygraph.src/M000001.html",
+     "doc/classes/Lilygraph.src/M000002.html",
+     "doc/classes/Lilygraph.src/M000003.html",
+     "doc/created.rid",
+     "doc/files/lib/lilygraph_rb.html",
+     "doc/fr_class_index.html",
+     "doc/fr_file_index.html",
+     "doc/fr_method_index.html",
+     "doc/index.html",
+     "doc/rdoc-style.css",
      "lib/lilygraph.rb",
      "lilygraph.gemspec"
   ]
