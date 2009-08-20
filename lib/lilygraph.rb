@@ -225,7 +225,7 @@ class Lilygraph
             @legend.sort.each_with_index do |data, index|
               color, label = data
               xml.rect :fill => color, :stroke => color, 'stroke-width' => 0, :x => legend_x + 10, :y => legend_y + 10 + (index * 15), :width => 35, :height => 10
-              xml.text label, :x => legend_x + 70, :y => legend_y + 18 + (index * 15), 'text-anchor' => 'left'
+              xml.text label, :x => legend_x + 55, :y => legend_y + 18 + (index * 15), 'text-anchor' => 'left'
             end
           end
 
