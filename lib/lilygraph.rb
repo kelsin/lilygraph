@@ -244,7 +244,7 @@ class Lilygraph
   def max
     ((((@data.map do |num|
           num.respond_to?(:max) ? num.max : num
-        end.max || 0) + 5) / 10.0).ceil * 10).round
+        end.max || 0) + 1) / 10.0).ceil * 10).round
   end
 
   def graph_height
