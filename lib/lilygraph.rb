@@ -203,23 +203,26 @@ class Lilygraph
               if @options[:bar_text]
                 last_bar_height = false
                 data.each_with_index do |number, number_index|
-                  height = ((dy / 10.0) * number).round
+                  if number > 0
+                    height = ((dy / 10.0) * number).round
 
-                  bar_x = (x + ((dx - width) / 2.0) + (number_index * bar_width)).round
-                  text_x = (bar_x + (bar_width / 2.0)).round
+                    bar_x = (x + ((dx - width) / 2.0) + (number_index * bar_width)).round
+                    text_x = (bar_x + (bar_width / 2.0)).round
 
-                  bar_y = @options[:viewbox][:height] - @options[:margin][:bottom] - height
-                  text_y = bar_y - 3
+                    bar_y = @options[:viewbox][:height] - @options[:margin][:bottom] - height
+                    text_y = bar_y - 3
 
-                  if last_bar_height && (last_bar_height < (number + 5) && last_bar_height > (number - 5))
-                    text_y -= (14 - ((number - last_bar_height) * (dy / 10.0)))
-                    last_bar_height = false
+                    if last_bar_height && (last_bar_height - height).abs < 14
+                      text_y -= (14 - (height - last_bar_height))
+                      last_bar_height = false
+                    else
+                      last_bar_height = height
+                    end
+
+                    xml.text number, :x => text_x, :y => text_y, 'text-anchor' => 'middle'
                   else
-                    last_bar_height = number
+                    last_bar_height = false
                   end
-
-                  # xml.text number, :x => text_x, :y => text_y + 1, 'text-anchor' => 'middle', 'font-size' => '13px', 'stroke-width' => 1.0, :fill => '#ffffff', :stroke => '#ffffff'
-                  xml.text number, :x => text_x, :y => text_y, 'text-anchor' => 'middle'
                 end
               end
             end
@@ -228,7 +231,7 @@ class Lilygraph
           # Legend
           if @legend
             legend_x = @options[:viewbox][:width] - (3 * @options[:margin][:right])
-            legend_y = @options[:margin][:top] / 2
+            legend_y = (@options[:margin][:top] / 2) + @options[:margin][:top]
             xml.rect :fill => '#ffffff', :stroke => '#000000', 'stroke-width' => 2, :x => legend_x, :y => legend_y, :width => (2.5 * @options[:margin][:right]), :height => (@legend.size * 15) + 16
 
             @legend.sort.each_with_index do |data, index|
