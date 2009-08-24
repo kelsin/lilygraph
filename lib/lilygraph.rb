@@ -167,7 +167,7 @@ class Lilygraph
           end
 
           # Bars
-          xml.g 'font-size' => '8px', 'stroke-width' => 0.3 do |xml|
+          xml.g 'font-size' => '10px', 'stroke-width' => 0.3 do |xml|
             @data.each_with_index do |data, data_index|
               data = Array(data)
               width = dx - @options[:padding]
@@ -201,6 +201,7 @@ class Lilygraph
 
               # Text
               if @options[:bar_text]
+                last_bar_height = false
                 data.each_with_index do |number, number_index|
                   height = ((dy / 10.0) * number).round
 
@@ -210,6 +211,14 @@ class Lilygraph
                   bar_y = @options[:viewbox][:height] - @options[:margin][:bottom] - height
                   text_y = bar_y - 3
 
+                  if last_bar_height && (last_bar_height < (number + 5) && last_bar_height > (number - 5))
+                    text_y -= (14 - ((number - last_bar_height) * (dy / 10.0)))
+                    last_bar_height = false
+                  else
+                    last_bar_height = number
+                  end
+
+                  # xml.text number, :x => text_x, :y => text_y + 1, 'text-anchor' => 'middle', 'font-size' => '13px', 'stroke-width' => 1.0, :fill => '#ffffff', :stroke => '#ffffff'
                   xml.text number, :x => text_x, :y => text_y, 'text-anchor' => 'middle'
                 end
               end
