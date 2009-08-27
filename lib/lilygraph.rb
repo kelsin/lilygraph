@@ -19,7 +19,9 @@ class Lilygraph
     :width => '100%',
     :indent => 2,
     :padding => 14,
+    :legend => :right,
     :bar_text => true,
+    :type => :bar,
     :viewbox => {
       :width => 800,
       :height => 600
@@ -139,20 +141,20 @@ class Lilygraph
             line_x1 = @options[:margin][:left] + 1
             line_x2 = @options[:viewbox][:width] - @options[:margin][:right] - 1
 
-            text_x = @options[:margin][:left] - 25
+            text_x = @options[:margin][:left] - 5
 
-            xml.text 0, :x => text_x, :y => (@options[:viewbox][:height] - @options[:margin][:bottom] + 4), 'stroke-width' => 0.5
+            xml.text 0, :x => text_x, :y => (@options[:viewbox][:height] - @options[:margin][:bottom] + 4), 'stroke-width' => 0.5, 'text-anchor' => 'end'
 
-            1.upto((max / 10) - 1) do |line_number|
+            1.upto((max / division) - 1) do |line_number|
               y = (@options[:margin][:top] + (line_number * dy)).round
               xml.line :x1 => line_x1, :y1 => y, :x2 => line_x2, :y2 => y, :stroke => '#666666'
-              xml.text max - line_number * 10, :x => text_x, :y => y + 4, 'stroke-width' => 0.5
+              xml.text max - line_number * division, :x => text_x, :y => y + 4, 'stroke-width' => 0.5, 'text-anchor' => 'end'
 
               # Smaller Line
               xml.line(:x1 => line_x1, :y1 => y + (0.5 * dy), :x2 => line_x2, :y2 => y + (0.5 * dy), :stroke => '#999999') if max < 55
             end
 
-            xml.text max, :x => text_x, :y => @options[:margin][:top] + 4, 'stroke-width' => 0.5
+            xml.text max, :x => text_x, :y => @options[:margin][:top] + 4, 'stroke-width' => 0.5, 'text-anchor' => 'end'
             # Smaller Line
             xml.line(:x1 => line_x1, :y1 => @options[:margin][:top] + (0.5 * dy), :x2 => line_x2, :y2 => @options[:margin][:top] + (0.5 * dy), :stroke => '#999999') if max < 55
           end
@@ -168,6 +170,8 @@ class Lilygraph
 
           # Bars
           xml.g 'font-size' => '10px', 'stroke-width' => 0.3 do |xml|
+            last_spot = []
+
             @data.each_with_index do |data, data_index|
               data = Array(data)
               width = dx - @options[:padding]
@@ -181,7 +185,7 @@ class Lilygraph
                           @colors.call(data_index, number_index, @data.size, data.size)
                         elsif @colors.class == Array
                           first = @colors[data_index % (@colors.size)]
-
+                          
                           if first.class == Array
                             first[number_index % (first.size)]
                           else
@@ -191,20 +195,40 @@ class Lilygraph
                           @colors
                         end
 
-                height = ((dy / 10.0) * number).round
+                height = ((dy / division) * number).round
 
                 bar_x = (x + ((dx - width) / 2.0) + (number_index * bar_width)).round
                 bar_y = @options[:viewbox][:height] - @options[:margin][:bottom] - height
 
-                xml.rect :fill => color, :stroke => color, 'stroke-width' => 0, :x => bar_x, :width => bar_width, :y => bar_y, :height => height - 1
+
+                case @options[:type]
+                when :bar then
+                  xml.rect :fill => color, :stroke => color, 'stroke-width' => 0, :x => bar_x, :width => bar_width, :y => bar_y, :height => height - 1
+                when :line then
+                  if last_spot[number_index]
+                    xml.line(:x1 => last_spot[number_index][:x], :y1 => last_spot[number_index][:y], :x2 => bar_x, :y2 => bar_y,
+                             :fill => color, :stroke => color, 'stroke-width' => 2.0)
+                  end
+                  xml.circle :cx => bar_x, :cy => bar_y, :fill => color, :stroke => color, :r => bar_width * 1.5
+                end
+                
+                last_spot[number_index] = { :x => bar_x, :y => bar_y }
               end
+            end
+
+            @data.each_with_index do |data, data_index|
+              data = Array(data)
+              width = dx - @options[:padding]
+              bar_width = (width / Float(data.size)).round
+
+              x = (@options[:margin][:left] + (dx * data_index)).round
 
               # Text
               if @options[:bar_text]
                 last_bar_height = false
                 data.each_with_index do |number, number_index|
                   if number > 0
-                    height = ((dy / 10.0) * number).round
+                    height = ((dy / division) * number).round
 
                     bar_x = (x + ((dx - width) / 2.0) + (number_index * bar_width)).round
                     text_x = (bar_x + (bar_width / 2.0)).round
@@ -230,7 +254,11 @@ class Lilygraph
 
           # Legend
           if @legend
-            legend_x = @options[:viewbox][:width] - (3 * @options[:margin][:right])
+            if @options[:legend] == :right
+              legend_x = @options[:viewbox][:width] - (3 * @options[:margin][:right])
+            else
+              legend_x = (@options[:margin][:left] * 1.5).round
+            end
             legend_y = (@options[:margin][:top] / 2) + @options[:margin][:top]
             xml.rect :fill => '#ffffff', :stroke => '#000000', 'stroke-width' => 2, :x => legend_x, :y => legend_y, :width => (2.5 * @options[:margin][:right]), :height => (@legend.size * 15) + 16
 
@@ -253,10 +281,18 @@ class Lilygraph
 
   private
 
+  def data_max
+    @data.map do |num|
+      num.respond_to?(:max) ? num.max : num
+    end.max || 0
+  end
+
+  def division
+    (10 ** Math.log10(data_max).floor) / 10
+  end
+
   def max
-    ((((@data.map do |num|
-          num.respond_to?(:max) ? num.max : num
-        end.max || 0) + 1) / 10.0).ceil * 10).round
+    (((data_max + (division / 10)) / Float(division)).ceil * Float(division)).round
   end
 
   def graph_height
@@ -276,6 +312,6 @@ class Lilygraph
   end
 
   def dy
-    (graph_height * 10.0) / Float(max)
+    (graph_height * division) / Float(max)
   end
 end
