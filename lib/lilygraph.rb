@@ -20,7 +20,7 @@ class Lilygraph
     :indent => 2,
     :padding => 14,
     :legend => :right,
-    :bar_text => true,
+    :bar_text => :number,
     :type => :bar,
     :viewbox => {
       :width => 800,
@@ -224,9 +224,11 @@ class Lilygraph
               x = (@options[:margin][:left] + (dx * data_index)).round
 
               # Text
-              if @options[:bar_text]
+              if @options[:bar_text] != :none
                 last_bar_height = false
                 data.each_with_index do |number, number_index|
+                  percent_total = data.inject(0) { |total, percent_number| total + percent_number }
+
                   if number > 0
                     height = ((dy / division) * number).round
 
@@ -243,7 +245,12 @@ class Lilygraph
                       last_bar_height = height
                     end
 
-                    xml.text number, :x => text_x, :y => text_y, 'text-anchor' => 'middle'
+                    label = case @options[:bar_text]
+                            when :number then number
+                            when :percent then (100.0 * Float(number) / Float(percent_total)).round.to_s + "%"
+                            end
+
+                    xml.text label, :x => text_x, :y => text_y, 'text-anchor' => 'middle'
                   else
                     last_bar_height = false
                   end
