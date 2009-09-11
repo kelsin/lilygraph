@@ -35,7 +35,7 @@ class Lilygraph
 
   # This is the data for the graph. It should be an array where every item is
   # either a number or an array of numbers.
-  # 
+  #
   # For a simple bar graph:
   #   graph.data=[1,2,3]
   # For a grouped bar graph:
@@ -57,7 +57,7 @@ class Lilygraph
   # number_index: The index of the current bar INSIDE of the current bar group (always 0 if you don't have grouped bars)
   # data_size: total number of bar or groups.
   # number_size: total number of bars in the current group (always 1 if you don't have bar groups)
-  # 
+  #
   # The default proc looks like:
   #   graph.colors=Proc.new do |data_index, number_index, data_size, number_size|
   #     Color::HSL.from_fraction(Float(data_index) / Float(data_size), 1.0, 0.4 + (Float(number_index) / Float(number_size) * 0.4)).to_rgb.html
@@ -185,7 +185,7 @@ class Lilygraph
                           @colors.call(data_index, number_index, @data.size, data.size)
                         elsif @colors.class == Array
                           first = @colors[data_index % (@colors.size)]
-                          
+
                           if first.class == Array
                             first[number_index % (first.size)]
                           else
@@ -211,7 +211,7 @@ class Lilygraph
                   end
                   xml.circle :cx => bar_x, :cy => bar_y, :fill => color, :stroke => color, :r => bar_width * 1.5
                 end
-                
+
                 last_spot[number_index] = { :x => bar_x, :y => bar_y }
               end
             end
@@ -295,7 +295,7 @@ class Lilygraph
   end
 
   def division
-    (10 ** Math.log10(data_max).floor) / 10
+    [(10 ** Math.log10(data_max).floor) / 10, 1].max
   end
 
   def max
