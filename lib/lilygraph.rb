@@ -299,7 +299,7 @@ class Lilygraph
   end
 
   def max
-    (((data_max + (division / 10)) / Float(division)).ceil * Float(division)).round
+    (((data_max + [division / 10, 1].max) / Float(division)).ceil * Float(division)).round
   end
 
   def graph_height
