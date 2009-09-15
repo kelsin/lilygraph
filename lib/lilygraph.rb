@@ -295,7 +295,7 @@ class Lilygraph
   end
 
   def division
-    [(10 ** Math.log10(data_max).floor) / 10, 1].max
+    [(10 ** Math.log10(data_max).floor), 1].max
   end
 
   def max
