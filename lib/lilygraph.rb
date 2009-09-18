@@ -289,9 +289,9 @@ class Lilygraph
   private
 
   def data_max
-    @data.map do |num|
-      num.respond_to?(:max) ? num.max : num
-    end.max || 0
+    [@data.map do |num|
+       num.respond_to?(:max) ? num.max : num
+     end.max || 1, 1].max
   end
 
   def division
