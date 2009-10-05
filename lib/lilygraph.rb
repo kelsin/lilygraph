@@ -22,7 +22,7 @@ class Lilygraph
     :legend => :right,
     :bar_text => :number,
     :type => :bar,
-    :padding => false,
+    :flush => false,
     :viewbox => {
       :width => 800,
       :height => 600
@@ -300,7 +300,7 @@ class Lilygraph
   end
 
   def max
-    if @options[:padding]
+    if @options[:flush]
       temp_max = (data_max + [division / 10, 1].max)
     else
       temp_max = data_max
