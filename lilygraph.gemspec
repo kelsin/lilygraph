@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{lilygraph}
-  s.version = "0.5.6"
+  s.version = "0.5.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Christopher Giroir"]
-  s.date = %q{2009-09-18}
+  s.date = %q{2009-10-05}
   s.description = %q{Lilygraph is a Ruby library for creating svg charts and graphs based on XmlBuilder.}
   s.email = %q{kelsin@valefor.com}
   s.extra_rdoc_files = [
