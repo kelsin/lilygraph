@@ -301,9 +301,9 @@ class Lilygraph
 
   def max
     if @options[:flush]
-      temp_max = (data_max + [division / 10, 1].max)
-    else
       temp_max = data_max
+    else
+      temp_max = (data_max + [division / 10, 1].max)
     end
 
     ((temp_max / Float(division)).ceil * Float(division)).round      
